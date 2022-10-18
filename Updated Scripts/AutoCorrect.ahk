@@ -1,112 +1,5 @@
-﻿; Global hotkeys
-;#a::Run, C:\Program Files (x86)\Avro Keyboard\Avro Keyboard.exe
-#+a::Run, "C:\Users\robiu\Downloads\"
-#b::Run, "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe"
-#+b::Run, "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe" -inprivateG
-#c::Run, chrome.exe
-#+c::Run, chrome.exe -incognito
-#+d::Run, "D:\Documents\Reading Docs"
-#+e::Run, C:\Program Files\Everything\Everything.exe
-#f::Run, firefox.exe
-;#m::Run, C:\Program Files (x86)\zksoft\marswifi\marswifi.exe
-#n::Run, C:\Program Files\Notepad++\notepad++.exe
-#p::Run, "C:\Program Files (x86)\PicPick\picpick.exe"
-#+p::Run, "D:\Projects"
-;#t::Run, C:\Program Files (x86)\TidyTabs\TidyTabs.Daemon.exe
-;#z::Run, C:\Users\robiu\AppData\Roaming\CareUEyes\CareUEyes.exe
-;#+g::Run, C:\Program Files (x86)\Grameenphone Internet\UnifiedUi.exe
-;#+l::Run, C:\Program Files (x86)\Skillbrains\lightshot\Lightshot.exe
-#+s::Run, "D:\Softwares"
-#+v::Run, "C:\Users\robiu\AppData\Local\Programs\Microsoft VS Code\Code.exe"
-#t::Run, "C:\Users\robiu\AppData\Local\Microsoft\WindowsApps\wt.exe"
-#z::Run, "C:\Program Files (x86)\PicPick\picpick.exe"
-
-;Always on Top (Shift + Ctrl + Space)
-^+SPACE:: Winset, Alwaysontop, , A
-
-; Google Search select text - Ctrl + Shift + C
-^+c::
-    {
-        Send, ^c
-        Sleep 50
-        Run, http://www.google.com/search?q=%clipboard%
-        Return
-    }
-
-    ; Custom volume buttons
-    !Up:: Send {Volume_Up} ;alt + Up arrow
-    !Down:: Send {Volume_Down} ;alt + Down arrow
-    break::Send {Volume_Mute} ; Break key mutes
-
-    ; Default state of lock keys
-    SetNumlockState, AlwaysOn
-    SetCapsLockState, AlwaysOff
-    SetScrollLockState, AlwaysOff
-
-    ; Suspend AutoHotkey
-    ; #+ScrollLock::Suspend ; Win + Shift + scrollLock
-
-return
-
-;====================================================
-; Windows Terminal Shortcut			   ||
-;====================================================
-
-#NoEnv ; Recommended for performance and compatibility with future AutoHotkey releases.
-; #Warn  ; Enable warnings to assist with detecting common errors.
-SendMode Input ; Recommended for new scripts due to its superior speed and reliability.
-
-F12::ToggleTerminal()
-
-ShowAndPositionTerminal()
-{
-    WinShow ahk_class CASCADIA_HOSTING_WINDOW_CLASS
-    WinActivate ahk_class CASCADIA_HOSTING_WINDOW_CLASS
-
-    SysGet, WorkArea, MonitorWorkArea
-    TerminalWidth := A_ScreenWidth * 0.9
-    TerminalHeight := A_ScreenHeight * 0.5
-
-    WinMove, ahk_class CASCADIA_HOSTING_WINDOW_CLASS,, (A_ScreenWidth - TerminalWidth) / 2, WorkAreaTop - 2, TerminalWidth, TerminalHeight
-}
-
-ToggleTerminal()
-{
-    EnvGet, home, HOME
-    EnvGet, localappdata, LOCALAPPDATA
-
-    WinMatcher := "ahk_class CASCADIA_HOSTING_WINDOW_CLASS"
-
-    DetectHiddenWindows, On
-
-    if WinExist(WinMatcher)
-        ; Window Exists
-    {
-        DetectHiddenWindows, Off
-
-        ; Check if its hidden
-        if !WinExist(WinMatcher) || !WinActive(WinMatcher)
-        {
-            ShowAndPositionTerminal()
-        }
-        else if WinExist(WinMatcher)
-        {
-            ; Script sees it without detecting hidden windows, so..
-            WinHide ahk_class CASCADIA_HOSTING_WINDOW_CLASS
-            Send !{Esc}
-        }
-    }
-    else
-    {
-        Run "%localappdata%\Microsoft\WindowsApps\wt.exe", %home%
-        Sleep, 1000
-        ShowAndPositionTerminal()
-    }
-}
-
-
-;=========================================================================
-; Auto Correct Script							||
+﻿;=========================================================================
+;                           Auto Correct Script							 ;
 ;=========================================================================
 
 ; c = case sensitive
@@ -114,9 +7,6 @@ ToggleTerminal()
 ; * = immediate change (no need for space, period, or enter)
 ; ? = triggered even when the character typed immediately before it is alphanumeric
 ; r = raw output
-
-; Suspend AutoHotkey
-#ScrollLock::Suspend ; Win + scrollLock
 
 ;------------------------------------------------------------------------------
 ; CHANGELOG:
@@ -178,8 +68,12 @@ ToggleTerminal()
 ;------------------------------------------------------------------------------
 ; Settings
 ;------------------------------------------------------------------------------
-#NoEnv ; For security
-#SingleInstance force
+#NoEnv
+#SingleInstance, Force
+SendMode, Input
+SetBatchLines, -1
+SetWorkingDir, %A_ScriptDir%
+
 
 ; Custom icon from http://www.famfamfam.com/lab/icons/silk/preview.php
 ; Menu, Tray, Icon, text_replace.ico
@@ -205,10 +99,10 @@ Hoty:
 Return
 */
 
-;------------------------------------------------------------------------------
-; Win+A to enter misspelling correction.  It will be added to this script.
-;------------------------------------------------------------------------------
-#a::
+;==============================================================================
+;   Win+A to enter misspelling correction.  It will be added to this script.  ;
+;==============================================================================
+#+a::
     ; Get the selected text. The clipboard is used instead of "ControlGet Selected"
     ; as it works in more editors and word processors, java apps, etc. Save the
     ; current clipboard contents to be restored later.
@@ -2939,6 +2833,7 @@ return ; This makes the above hotstrings do nothing so that they override the ig
     ::hypocrits::hypocrites
     ::i;d::I'd
     ::i"m::I'm
+    ::im::I'm
     ::iconclastic::iconoclastic
     ::idae::idea
     ::idaeidae::idea
@@ -2959,7 +2854,6 @@ return ; This makes the above hotstrings do nothing so that they override the ig
     ::ilogical::illogical
     ::ilumination::illumination
     ::illution::illusion
-    ::im::I'm
     ::imagenary::imaginary
     ::imagin::imagine
     ::inbalance::imbalance
